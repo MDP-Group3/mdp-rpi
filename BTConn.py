@@ -44,7 +44,7 @@ class BTConn(object):
     def write(self,text):
         try:
             self.clientSocket.send(str(text))   # Send data string to socket
-            #print "BT sent: " + str(text)
+            print "BT sent: " + str(text)
         except Exception, e:
             print "BT write failed: " + str(e)
             print "Waiting..Reconnecting"
@@ -52,8 +52,8 @@ class BTConn(object):
     
     def read(self):
         try:
-            text = self.clientSocket.recv(buffersize=2048)  # Receive upto buffersize bytes from socket
-            #print "BT Received: " + str(text)
+            text = self.clientSocket.recv(2048)  # Receive upto buffersize bytes from socket
+            print "BT Received: " + str(text)
             return text
         except Exception, e:
             print "BT Receive failed:" + str(e)
