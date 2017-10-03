@@ -4,10 +4,11 @@ import time
 
 class BTConn(object):
 
-	def _init_(self):
+	def __init__(self):
 		#self.nexus_addr = "08:60:6E:A5:8C:8A"
 		self.isConnected = False
-        def connect(self):
+        
+    def connect(self):
 		try:
 			self.btSocket = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
 			self.btSocket.bind(("", 4))
@@ -34,23 +35,26 @@ class BTConn(object):
 			self.isConnected = True
 		except Exception, e:
 			print "BT connection failed:" + str(e)
+	
 	def write(self,text):
 		try:
-			self.clientSocket.send(str(text))
+			self.clientSocket.send(str(text))	# Send data string to socket
 			#print "BT sent: " + str(text)
 		except Exception, e:
 			print "BT write failed: " + str(e)
 			print "Waiting..Reconnecting"
 			self.connect()
+	
 	def read(self):
 		try:
-			text = self.clientSocket.recv(2048)
+			text = self.clientSocket.recv(buffersize=2048)	# Receive upto buffersize bytes	from socket
 			#print "BT Received: " + str(text)
 			return text
 		except Exception, e:
 			print "BT Receive failed:" + str(e)
 			print "BT Waiting..Reconnecting"
 			self.connect()
+	
 	def close(self):
 		try:
 			if self.clientSocket:
@@ -60,9 +64,10 @@ class BTConn(object):
 			self.bt_is_connected = False
 		except Exception, e:
 			print str(e)
+
+
 if __name__ == "__main__":
 	bt = BTConn()
-	bt._init_()
 	bt.connect()
 	time.sleep(5)
 	#var = 1
@@ -71,7 +76,7 @@ if __name__ == "__main__":
 	#	if var == 10:
 	#		break
 	#	else:
-	bt.write("wwww")
+	bt.write("www")
 	
 	time.sleep(5)	
 	text = bt.read()
