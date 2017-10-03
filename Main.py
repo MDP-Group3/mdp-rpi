@@ -104,6 +104,7 @@ class Main(threading.Thread):
 		self.bt.close()
 		self.sr.close()
 		print "Closing"
+	
 	def zzz(self):
 		while True:
 			time.sleep(0.5)

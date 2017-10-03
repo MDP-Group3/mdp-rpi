@@ -19,13 +19,12 @@ class BTConn(object):
 			#uuid = "8ce255c0-200a-11e0-ac64-0800200c9a66"
 			
 			#s2 terminal
-			uuid = "00001101-0000-1000-8000-00805F9B34FB"
+			# uuid = "00001101-0000-1000-8000-00805F9B34FB"
 
 			# Advertise bluetooth service with local SDP server
-			bluetooth.advertise_service(self.btSocket, "raspberrypi", service_id = uuid, 
-					  service_classes = [ uuid, bluetooth.SERIAL_PORT_CLASS ],
-					  profiles = [ bluetooth.SERIAL_PORT_PROFILE ]
-					  )
+			# bluetooth.advertise_service(self.btSocket, "raspberrypi", service_id = uuid, 
+			# 		  service_classes = [ uuid, bluetooth.SERIAL_PORT_CLASS ],
+			# 		  profiles = [ bluetooth.SERIAL_PORT_PROFILE ])
 
 			# Wait for an incoming connection, then return new socket
 			# representing the connection and its address/port
