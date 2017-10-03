@@ -10,11 +10,17 @@ class BTConn(object):
         
     def connect(self):
         try:
+            print("connect start")
             self.btSocket = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
+            print("init socket")
             self.btSocket.bind(("", 4))
+            print("bind socket")
             self.btSocket.listen(1) # Start listening on rfcomm socket
+            print("listening")
             
             port = self.btSocket.getsockname()[1]
+            print("got socket name")
+            
             #android app
             #uuid = "8ce255c0-200a-11e0-ac64-0800200c9a66"
             
@@ -67,16 +73,10 @@ class BTConn(object):
 
 if __name__ == "__main__":
     bt = BTConn()
+    print("finish init BTConn")
     bt.connect()
     time.sleep(5)
-    #var = 1
-    #while var==1:
-    #   text = raw_input("send: ")
-    #   if var == 10:
-    #       break
-    #   else:
-    bt.write("www")
-    
+    bt.write("Hello World")
     time.sleep(5)   
     text = bt.read()
     print str(text)
