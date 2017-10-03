@@ -29,14 +29,14 @@ class PCConn(object):
     def write(self, message):
         try:
             self.client.sendto(message, self.clientIP)
-            #print "PC Sent: ", str(message)
+            print "PC Sent: ", str(message)
         except Exception, e:
             print "PC write Error: ", str(e)
 
     def read(self):
         try:
             text = self.client.recv(2048)
-            #print str(text)
+            print str(text)
             return text
         except Exception, e:
             print "PC read Error: ", str(e)
@@ -53,8 +53,8 @@ if __name__ == "__main__":
     pcc.connect()
 
     time.sleep(5)
-    pcc.write('a')
+    pcc.write('hello from rpi')
 
     text = pcc.read()
-    print "Read: ",text
+    print "Read: ",str(text)
     pcc.close()
