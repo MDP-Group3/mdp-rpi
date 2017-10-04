@@ -27,19 +27,31 @@ class PCConn(object):
             print "PC connection Error: ", str(e)
 
     def write(self, message):
-        try:
-            self.client.sendto(message, self.clientIP)
-            print "PC Sent: ", str(message)
-        except Exception, e:
-            print "PC write Error: ", str(e)
+        while True:
+            try:
+                self.client.sendto(message, self.clientIP)
+                print "PC Sent: ", str(message)
+            except Exception, e:
+                print "PC write Error: ", str(e)
+                print "PC Waiting..Reconnecting"
+                self.connect()
+                continue
+            else:
+                break
 
     def read(self):
-        try:
-            text = self.client.recv(2048)
-            print str(text)
-            return text
-        except Exception, e:
-            print "PC read Error: ", str(e)
+        while True:
+            try:
+                text = self.client.recv(2048)
+                print str(text)
+                return text
+            except Exception, e:
+                print "PC read Error: ", str(e)
+                print "PC Waiting..Reconnecting"
+                self.connect()
+                continue
+            else:
+                break
 
     def close(self):
         if self.server:

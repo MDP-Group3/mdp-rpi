@@ -42,23 +42,31 @@ class BTConn(object):
             print "BT connection failed:" + str(e)
     
     def write(self,text):
-        try:
-            self.clientSocket.send(str(text))   # Send data string to socket
-            print "BT sent: " + str(text)
-        except Exception, e:
-            print "BT write failed: " + str(e)
-            print "Waiting..Reconnecting"
-            self.connect()
-    
+        while True:
+            try:
+                self.clientSocket.send(str(text))   # Send data string to socket
+                print "BT sent: " + str(text)
+            except Exception, e:
+                print "BT write failed: " + str(e)
+                print "Waiting..Reconnecting"
+                self.connect()
+                continue
+            else:
+                break
+            
     def read(self):
-        try:
-            text = self.clientSocket.recv(2048)  # Receive upto buffersize bytes from socket
-            print "BT Received: " + str(text)
-            return text
-        except Exception, e:
-            print "BT Receive failed:" + str(e)
-            print "BT Waiting..Reconnecting"
-            self.connect()
+        while True:
+            try:
+                text = self.clientSocket.recv(2048)  # Receive upto buffersize bytes from socket
+                print "BT Received: " + str(text)
+                return text
+            except Exception, e:
+                print "BT Receive failed:" + str(e)
+                print "BT Waiting..Reconnecting"
+                self.connect()
+                continue
+            else:
+                break
     
     def close(self):
         try:
@@ -75,8 +83,8 @@ if __name__ == "__main__":
     bt = BTConn()
     print("finished init BTConn")
     bt.connect()
-    #bt.write("Hello World")
-    #time.sleep(5)   
+    time.sleep(5)
+    #bt.write("00000020008002000800000001f8000200040008438098010002000400880f00000000000080")
     while(1):
-        text = bt.read()
-        print str(text)
+        str=bt.read()
+        print(str)
