@@ -53,7 +53,7 @@ if __name__ == "__main__":
     pcc.connect()
 
     time.sleep(5)
-    pcc.write('hello from rpi')
+    pcc.write('Hello from rpi')
 
     text = pcc.read()
     print "Read: ",str(text)

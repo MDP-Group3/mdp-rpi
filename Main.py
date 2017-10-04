@@ -29,15 +29,18 @@ class Main(threading.Thread):
 		
 			msg = self.pc.read()
 			print "Received from PC: ", str(msg)
-			#if destination is tablet
+			
+			# if destination is tablet
 			if(msg[2] == 'T'):
 				self.bt.write(msg[4:])
 				#self.sr.write(msg[4:])
 				print "PC>Tablet: ", str(msg[4:])
-			#else if destination is arduino
+			
+			# else if destination is arduino
 			#elif(msg[2] == 'A'):
 				#self.sr.write(msg[4:])
 				#print "PC>Arduino: ", str(msg[4:])
+			
 			else:
 				print "Invalid Header: ", str(msg)
 				#time.sleep
@@ -48,10 +51,12 @@ class Main(threading.Thread):
 		
 			msg = self.bt.read()
 			print "Receive from BT: ", str(msg)
+			
 			#if destination is PC
 			if(msg[2] == 'P'):
 				self.pc.write(msg[4:])
 				print "BT>PC: ", str(msg[4:])
+			
 			#if destination is Arduino
 			#elif(msg[2] == 'A'):
 				#self.sr.write(msg[4:])
@@ -63,7 +68,6 @@ class Main(threading.Thread):
 	def readSerialMsg(self):
 		while True:
 			print "In Read Serial Message"
-		
 			#msg = self.sr.read()
 			#print "Received from Arduino: ", str(msg)
 			#self.pc.write(str(msg))			
