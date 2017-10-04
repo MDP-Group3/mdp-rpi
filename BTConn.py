@@ -75,7 +75,6 @@ if __name__ == "__main__":
     bt = BTConn()
     print("finished init BTConn")
     bt.connect()
-    #time.sleep(5)
     #bt.write("Hello World")
     #time.sleep(5)   
     while(1):
