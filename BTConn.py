@@ -73,10 +73,11 @@ class BTConn(object):
 
 if __name__ == "__main__":
     bt = BTConn()
-    print("finish init BTConn")
+    print("finished init BTConn")
     bt.connect()
-    time.sleep(5)
-    bt.write("Hello World")
-    time.sleep(5)   
-    text = bt.read()
-    print str(text)
+    #time.sleep(5)
+    #bt.write("Hello World")
+    #time.sleep(5)   
+    while(1):
+        text = bt.read()
+        print str(text)
