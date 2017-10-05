@@ -11,16 +11,19 @@ from PCConn import *
 class Main(threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
-        
-        #self.sr = SerialConn()
+##      self.sr = SerialConn()
         self.bt = BTConn()
         self.pc = PCConn()
 
-        #self.sr.connect()
+##        self.sr.connect()
         self.bt.connect()
-        self.pc.connect()          
+        self.pc.connect() 
 
     def readPCmsg(self):
+##        if (self.pc.isConnected == False):
+##            time.sleep(30)
+##            self.pc.connect()  
+            
         while True:
             try:
                 print "In Read PC Message"
@@ -42,10 +45,13 @@ class Main(threading.Thread):
                 else:
                     print "Invalid Header: ", str(msg)
             except Exception, e:
-                time.sleep(5)
                 continue
         
     def readBTmsg(self):
+##        if (self.bt.isConnected == False):
+##            time.sleep(30)
+##            self.bt.connect()
+            
         while True:
             try:
                 print "In Read BT Message"
@@ -66,7 +72,6 @@ class Main(threading.Thread):
                 else:
                     print "Invalid Header: ", str(msg)
             except Exception, e:
-                time.sleep(5)
                 continue
     
     def readSerialMsg(self):

@@ -39,6 +39,7 @@ class BTConn(object):
             print "BT connected to ", clientAddr            
             self.isConnected = True
         except Exception, e:
+            time.sleep(5)
             print "BT connection failed:" + str(e)
 
     def reconnect(self):
@@ -81,14 +82,13 @@ class BTConn(object):
                 break
     
     def close(self):
-        try:
-            if self.clientSocket:
-                self.clientSocket.close()
-            if self.btSocket:
-                self.btSocket.close()
+        if self.clientSocket:
+            self.clientSocket.close()
+        if self.btSocket:
+            self.btSocket.close()
             self.bt_is_connected = False
-        except Exception, e:
-            print str(e)
+##        except Exception, e:
+##            print str(e)
 
 
 if __name__ == "__main__":

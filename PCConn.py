@@ -24,6 +24,7 @@ class PCConn(object):
             self.isConnected = True
 
         except Exception, e:
+            time.sleep(5)
             print "PC connection Error: ", str(e)
 
     def reconnect(self):
