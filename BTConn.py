@@ -40,6 +40,18 @@ class BTConn(object):
             self.isConnected = True
         except Exception, e:
             print "BT connection failed:" + str(e)
+
+    def reconnect(self):
+        while True:
+            try:
+                if (self.isConnected == False):
+                    print "Waiting..Reconnecting"
+                    self.connect()
+            except Exception, e:
+                print str(e)
+                continue
+            else:
+                break
     
     def write(self,text):
         while True:
@@ -48,12 +60,12 @@ class BTConn(object):
                 print "BT sent: " + str(text)
             except Exception, e:
                 print "BT write failed: " + str(e)
-                print "Waiting..Reconnecting"
-                self.connect()
+                self.isConnected = False
+                self.reconnect()
                 continue
             else:
                 break
-            
+    
     def read(self):
         while True:
             try:
@@ -62,8 +74,8 @@ class BTConn(object):
                 return text
             except Exception, e:
                 print "BT Receive failed:" + str(e)
-                print "BT Waiting..Reconnecting"
-                self.connect()
+                self.isConnected = False
+                self.reconnect()
                 continue
             else:
                 break
@@ -81,7 +93,7 @@ class BTConn(object):
 
 if __name__ == "__main__":
     bt = BTConn()
-    print("finished init BTConn")
+    #print("finished init BTConn")
     bt.connect()
     time.sleep(5)
     #bt.write("00000020008002000800000001f8000200040008438098010002000400880f00000000000080")

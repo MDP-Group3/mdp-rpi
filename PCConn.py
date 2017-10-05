@@ -26,6 +26,18 @@ class PCConn(object):
         except Exception, e:
             print "PC connection Error: ", str(e)
 
+    def reconnect(self):
+        while True:
+            try:
+                if (self.isConnected == False):
+                    print "Waiting..Reconnecting"
+                    self.connect()
+            except Exception, e:
+                print str(e)
+                continue
+            else:
+                break
+
     def write(self, message):
         while True:
             try:
@@ -33,8 +45,8 @@ class PCConn(object):
                 print "PC Sent: ", str(message)
             except Exception, e:
                 print "PC write Error: ", str(e)
-                print "PC Waiting..Reconnecting"
-                self.connect()
+                self.isConnected = False
+                self.reconnect()
                 continue
             else:
                 break
@@ -47,8 +59,8 @@ class PCConn(object):
                 return text
             except Exception, e:
                 print "PC read Error: ", str(e)
-                print "PC Waiting..Reconnecting"
-                self.connect()
+                self.isConnected = False
+                self.reconnect()
                 continue
             else:
                 break
@@ -65,7 +77,7 @@ if __name__ == "__main__":
     pcc.connect()
 
     time.sleep(5)
-    pcc.write('Hello from rpi')
+    #pcc.write('Hello from rpi')
 
     text = pcc.read()
     print "Read: ",str(text)

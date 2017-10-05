@@ -15,64 +15,69 @@ class Main(threading.Thread):
         #self.sr = SerialConn()
         self.bt = BTConn()
         self.pc = PCConn()
-        
+
         #self.sr.connect()
         self.bt.connect()
-        self.pc.connect()
-        
-        print "Connected...Waiting.."
-        time.sleep(2)
-        
+        self.pc.connect()          
+
     def readPCmsg(self):
         while True:
-            print "In Read PC Message"
-        
-            msg = self.pc.read()
-            print "Received from PC: ", str(msg)
+            try:
+                print "In Read PC Message"
             
-            # if destination is tablet
-            if(msg[0] == 'T'):
-                self.bt.write(msg[1:])
-                #self.sr.write(msg[4:])
-                print "PC>Tablet: ", str(msg[1:])
-            
-            # else if destination is arduino
-            #elif(msg[0] == 'A'):
-                #self.sr.write(msg[1:])
-                #print "PC>Arduino: ", str(msg[1:])
-            
-            else:
-                print "Invalid Header: ", str(msg)
-                #time.sleep
+                msg = self.pc.read()
+                print "Received from PC: ", str(msg)
+                
+                # if destination is tablet
+                if(msg[0] == 'T'):
+                    self.bt.write(msg[1:])
+                    #self.sr.write(msg[4:])
+                    print "PC>Tablet: ", str(msg[1:])
+                
+                # else if destination is arduino
+                #elif(msg[0] == 'A'):
+                    #self.sr.write(msg[1:])
+                    #print "PC>Arduino: ", str(msg[1:])
+                
+                else:
+                    print "Invalid Header: ", str(msg)
+            except Exception, e:
+                time.sleep(5)
+                continue
         
     def readBTmsg(self):
         while True:
-            print "In Read BT Message"
-        
-            msg = self.bt.read()
-            print "Receive from BT: ", str(msg)
+            try:
+                print "In Read BT Message"
             
-            #if destination is PC
-            if(msg[0] == 'P'):
-                self.pc.write(msg[1:])
-                print "BT>PC: ", str(msg[1:])
+                msg = self.bt.read()
+                print "Receive from BT: ", str(msg)
+                
+                #if destination is PC
+                if(msg[0] == 'P'):
+                    self.pc.write(msg[1:])
+                    print "BT>PC: ", str(msg[1:])
+                
+                #if destination is Arduino
+                #elif(msg[0] == 'A'):
+                    #self.sr.write(msg[1:])
+                    #print "BT>Arduino: ", str(msg[1:])
             
-            #if destination is Arduino
-            #elif(msg[0] == 'A'):
-                #self.sr.write(msg[1:])
-                #print "BT>Arduino: ", str(msg[1:])
-        
-            else:
-                print "Invalid Header: ", str(msg)
+                else:
+                    print "Invalid Header: ", str(msg)
+            except Exception, e:
+                time.sleep(5)
+                continue
     
     def readSerialMsg(self):
         while True:
             print "In Read Serial Message"
             #msg = self.sr.read()
+            
             #print "Received from Arduino: ", str(msg)
             #self.pc.write(str(msg))            
                     
-    def threadInit(self):
+    def threadInit(self):     
         pcReadT = threading.Thread(target = self.readPCmsg, name = "PC Read Thread")
         pcWriteT = threading.Thread(target = self.pc.write, args = ("",), name = "PC Write Thread")
         print "PC Read/Write init"
