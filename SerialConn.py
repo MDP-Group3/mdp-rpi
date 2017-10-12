@@ -51,10 +51,20 @@ if __name__ == "__main__":
     #time.sleep(2)
     print "1. connect"
     sr.connect()
-    time.sleep(1.7)
-    print "2. write"
-    sr.write('b')
-    print "3. read" 
-    sr.read()
+    time.sleep(2)
+    #print "2. write"
+    #sr.write('F')
+    #print "3. read" 
+    #st = sr.read()
+    #print st
+
+    while(1):
+        sr.write('F')
+        st=sr.read()
+        print st
+        sr.write('R')
+        st=sr.read()
+        print st
     #print "received: %s" %sr.read
     #sr.close
+    
