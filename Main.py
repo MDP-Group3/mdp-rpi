@@ -44,8 +44,15 @@ class Main(threading.Thread):
                 
                     # else if destination is arduino
                     elif(msg[0] == 'A'):
-                        self.sr.write(msg[1:])
-                        print "PC>Arduino: ", str(msg[1:])
+                        if(len(msg)==4):
+                            self.sr.write(msg[1])
+                            print "PC>Arduino: ", str(msg[1])
+                            delay(3)
+                            self.sr.write(msg[3])
+                            print "PC>Arduino: ", str(msg[3])
+                        else:
+                            self.sr.write(msg[1:])
+                            print "PC>Arduino: ", str(msg[1:])
                 
                     else:
                         print "Invalid Header: ", str(msg)
