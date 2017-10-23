@@ -1,0 +1,9 @@
+Connecting to 192.168.3.1:1818 ......
+Connection to 192.168.3.1:1818 Established!
+Awaiting EX_START
+Awaiting Message ......
+EX_START
+Starting Exploration
+Sending 'Ad' to Arduino
+Awaiting Message ......
+EX_START
