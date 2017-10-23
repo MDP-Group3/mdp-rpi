@@ -11,11 +11,11 @@ from PCConn import *
 class Main(threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
-##      self.sr = SerialConn()
+        self.sr = SerialConn()
         self.bt = BTConn()
         self.pc = PCConn()
 
-##        self.sr.connect()
+        self.sr.connect()
         self.bt.connect()
         self.pc.connect() 
 
@@ -29,21 +29,33 @@ class Main(threading.Thread):
                 print "In Read PC Message"
             
                 msg = self.pc.read()
-                print "Received from PC: ", str(msg)
-                
-                # if destination is tablet
-                if(msg[0] == 'T'):
-                    self.bt.write(msg[1:])
-                    #self.sr.write(msg[4:])
-                    print "PC>Tablet: ", str(msg[1:])
-                
-                # else if destination is arduino
-                #elif(msg[0] == 'A'):
-                    #self.sr.write(msg[1:])
-                    #print "PC>Arduino: ", str(msg[1:])
-                
+              	if (msg[0] == ''):
+                    print "empty string"
+                    time.sleep(30)
+                    break
                 else:
-                    print "Invalid Header: ", str(msg)
+                    print "Received from PC: ", str(msg)
+                
+                    # if destination is tablet
+                    if(msg[0] == 'T'):
+                        self.bt.write(msg[1:])
+                        #self.sr.write(msg[4:])
+                        print "PC>Tablet: ", str(msg[1:])
+                
+                    # else if destination is arduino
+                    elif(msg[0] == 'A'):
+                        if(len(msg)==4):
+                            self.sr.write(msg[1])
+                            print "PC>Arduino: ", str(msg[1])
+                            delay(3)
+                            self.sr.write(msg[3])
+                            print "PC>Arduino: ", str(msg[3])
+                        else:
+                            self.sr.write(msg[1:])
+                            print "PC>Arduino: ", str(msg[1:])
+                
+                    else:
+                        print "Invalid Header: ", str(msg)
             except Exception, e:
                 continue
         
@@ -65,9 +77,9 @@ class Main(threading.Thread):
                     print "BT>PC: ", str(msg[1:])
                 
                 #if destination is Arduino
-                #elif(msg[0] == 'A'):
-                    #self.sr.write(msg[1:])
-                    #print "BT>Arduino: ", str(msg[1:])
+                elif(msg[0] == 'A'):
+                    self.sr.write(msg[1:])
+                    print "BT>Arduino: ", str(msg[1:])
             
                 else:
                     print "Invalid Header: ", str(msg)
@@ -77,10 +89,10 @@ class Main(threading.Thread):
     def readSerialMsg(self):
         while True:
             print "In Read Serial Message"
-            #msg = self.sr.read()
+            msg = self.sr.read()
             
-            #print "Received from Arduino: ", str(msg)
-            #self.pc.write(str(msg))            
+            print "Received from Arduino: ", str(msg[1:])
+            self.pc.write(str(msg[1:]))            
                     
     def threadInit(self):     
         pcReadT = threading.Thread(target = self.readPCmsg, name = "PC Read Thread")
@@ -91,9 +103,9 @@ class Main(threading.Thread):
         btWriteT = threading.Thread(target = self.bt.write, args = ("",), name = "BT Write Thread")
         print "BT Read/Write init"
         
-        #serialReadT = threading.Thread(target = self.readSerialMsg, name = "Serial Read Thread")
-        #serialWriteT = threading.Thread(target = self.sr.write, args = ("",), name = "Serial Write Thread")
-        #print "Serial Read/Write init"
+        serialReadT = threading.Thread(target = self.readSerialMsg, name = "Serial Read Thread")
+        serialWriteT = threading.Thread(target = self.sr.write, args = ("",), name = "Serial Write Thread")
+        print "Serial Read/Write init"
         
         pcReadT.daemon = True
         pcWriteT.daemon = True
@@ -101,8 +113,8 @@ class Main(threading.Thread):
         btReadT.daemon = True
         btWriteT.daemon = True
 
-        #serialReadT.daemon = True
-        #serialWriteT.daemon = True
+        serialReadT.daemon = True
+        serialWriteT.daemon = True
     
         pcReadT.start()
         pcWriteT.start()
@@ -110,13 +122,13 @@ class Main(threading.Thread):
         btReadT.start()
         btWriteT.start()
 
-        #serialReadT.start()
-        #serialWriteT.start()
+        serialReadT.start()
+        serialWriteT.start()
 
     def close(self):
         self.pc.close()
         self.bt.close()
-        #self.sr.close()
+        self.sr.close()
         print "Closing"
     
     def zzz(self):
