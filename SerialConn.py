@@ -13,7 +13,7 @@ class SerialConn(object):
 
     def connect(self):
         try:
-            self.ser = serial.Serial('/dev/ttyACM0', 115200,)
+            self.ser = serial.Serial('/dev/ttyACM0', 115200)
             print "Serial Connected"
         except Exception, e:
             print e.message
@@ -52,19 +52,13 @@ if __name__ == "__main__":
     print "1. connect"
     sr.connect()
     time.sleep(2)
-    #print "2. write"
-    #sr.write('F')
-    #print "3. read" 
+    print "2. write"
+    sr.write('X')
     #st = sr.read()
     #print st
-
-    while(1):
-        sr.write('F')
-        st=sr.read()
-        print st
-        sr.write('R')
-        st=sr.read()
-        print st
-    #print "received: %s" %sr.read
-    #sr.close
+    time.sleep(2)
+    sr.write('F2RF2LF2')
+    print "3. read" 
+    st = sr.read()
+    print st
     
