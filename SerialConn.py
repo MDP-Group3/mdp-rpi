@@ -8,11 +8,10 @@ class SerialConn(object):
         self.baud_rate=115200
         self.ser=None
         print "init Serial"
-        print "/dev/ttyACM0"
-        print "115200"
 
     def connect(self):
         try:
+            # Connect to device through Serial Port at specified baud rate
             self.ser = serial.Serial('/dev/ttyACM0', 115200)
             print "Serial Connected"
         except Exception, e:
@@ -20,22 +19,18 @@ class SerialConn(object):
             
     def write(self, text):
         try:
-            #text = text.upper()
-            print "in serial write"
             text = str(text).replace('\n', '\r')
             text = text + '\r'
-            self.ser.write(text)
+            self.ser.write(text)    # write data to serial port
             self.ser.flush()
-            print "serial write finished"
-            #print text
+            print "Sent: "+ text
         except Exception, e:
             print e.message
 
     def read(self):
         try:
-            #self.ser.flushInput()
-            received = self.ser.readline()          
-            #print "Received: " + str(received)
+            received = self.ser.readline()  # read data from serial port     
+            print "Received: " + str(received)  
             return received
         except Exception, e:
             print e.message
@@ -43,22 +38,13 @@ class SerialConn(object):
     def close(self):
         if(self.ser):
             self.ser.close()
-            #print "close"
     
 if __name__ == "__main__":
     sr = SerialConn()
     sr._init_()
-    #time.sleep(2)
-    print "1. connect"
     sr.connect()
     time.sleep(2)
-    print "2. write"
     sr.write('X')
-    #st = sr.read()
-    #print st
-    time.sleep(2)
-    sr.write('F2RF2LF2')
-    print "3. read" 
     st = sr.read()
     print st
-    
+    sr.close()

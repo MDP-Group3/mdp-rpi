@@ -1,8 +1,6 @@
 #!/usr/bin/python
-
 import sys
 import time
-#import Queue
 import threading
 from SerialConn import *
 from BTConn import *
@@ -14,20 +12,14 @@ class Main(threading.Thread):
         self.sr = SerialConn()
         self.bt = BTConn()
         self.pc = PCConn()
-
         self.sr.connect()
         self.bt.connect()
         self.pc.connect() 
 
-    def readPCmsg(self):
-##        if (self.pc.isConnected == False):
-##            time.sleep(30)
-##            self.pc.connect()  
-            
+    def readPCmsg(self):         
         while True:
             try:
                 print "In Read PC Message"
-            
                 msg = self.pc.read()
               	if (msg[0] == ''):
                     print "empty string"
@@ -35,52 +27,42 @@ class Main(threading.Thread):
                     break
                 else:
                     print "Received from PC: ", str(msg)
-                
                     # if destination is tablet
                     if(msg[0] == 'T'):
                         self.bt.write(msg[1:])
-                        #self.sr.write(msg[4:])
                         print "PC>Tablet: ", str(msg[1:])
-                
                     # else if destination is arduino
                     elif(msg[0] == 'A'):
-                        if(len(msg)==4):
+                        if(len(msg)==4):    # if faulty reception: two commands received together
                             self.sr.write(msg[1])
                             print "PC>Arduino: ", str(msg[1])
                             delay(3)
                             self.sr.write(msg[3])
                             print "PC>Arduino: ", str(msg[3])
-                        else:
+                        else:               # if faultless reception 
                             self.sr.write(msg[1:])
                             print "PC>Arduino: ", str(msg[1:])
-                
+                    # no valid destination           
                     else:
                         print "Invalid Header: ", str(msg)
             except Exception, e:
                 continue
         
-    def readBTmsg(self):
-##        if (self.bt.isConnected == False):
-##            time.sleep(30)
-##            self.bt.connect()
-            
+    def readBTmsg(self):            
         while True:
             try:
                 print "In Read BT Message"
-            
                 msg = self.bt.read()
                 print "Receive from BT: ", str(msg)
-                
                 #if destination is PC
                 if(msg[0] == 'P'):
                     self.pc.write(msg[1:])
                     print "BT>PC: ", str(msg[1:])
-                
                 #if destination is Arduino
                 elif(msg[0] == 'A'):
                     self.sr.write(msg[1:])
                     print "BT>Arduino: ", str(msg[1:])
-            
+                # no valid destination
                 else:
                     print "Invalid Header: ", str(msg)
             except Exception, e:
@@ -90,7 +72,6 @@ class Main(threading.Thread):
         while True:
             print "In Read Serial Message"
             msg = self.sr.read()
-            
             print "Received from Arduino: ", str(msg[1:])
             self.pc.write(str(msg[1:]))            
                     
@@ -109,19 +90,14 @@ class Main(threading.Thread):
         
         pcReadT.daemon = True
         pcWriteT.daemon = True
-
         btReadT.daemon = True
         btWriteT.daemon = True
-
         serialReadT.daemon = True
         serialWriteT.daemon = True
-    
         pcReadT.start()
         pcWriteT.start()
-
         btReadT.start()
         btWriteT.start()
-
         serialReadT.start()
         serialWriteT.start()
 
@@ -131,7 +107,7 @@ class Main(threading.Thread):
         self.sr.close()
         print "Closing"
     
-    def zzz(self):
+    def sleep(self):
         while True:
             time.sleep(0.5)
 
@@ -139,6 +115,6 @@ if __name__ == "__main__":
     m = Main()
     try:
         m.threadInit()
-        m.zzz()
+        m.sleep()
     except KeyboardInterrupt:
         m.close()

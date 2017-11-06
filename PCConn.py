@@ -14,15 +14,14 @@ class PCConn(object):
     
     def connect(self):
         try:
+            # Connect to client using TCP for defined IP address and port number
             self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.server.bind((self.serverIP, self.port))
             self.server.listen(1)
             print "PC waiting for connection..."
-
             self.client, self.clientIP = self.server.accept()
             print "PC connection from ", self.clientIP
             self.isConnected = True
-
         except Exception, e:
             time.sleep(5)
             print "PC connection Error: ", str(e)
@@ -31,7 +30,7 @@ class PCConn(object):
         while True:
             try:
                 if (self.isConnected == False):
-                    print "Waiting..Reconnecting"
+                    print "Reconnecting..."
                     self.connect()
             except Exception, e:
                 print str(e)
@@ -42,7 +41,7 @@ class PCConn(object):
     def write(self, message):
         while True:
             try:
-                self.client.sendto(message, self.clientIP)
+                self.client.sendto(message, self.clientIP)  # send data to client
                 print "PC Sent: ", str(message)
             except Exception, e:
                 print "PC write Error: ", str(e)
@@ -55,7 +54,7 @@ class PCConn(object):
     def read(self):
         while True:
             try:
-                text = self.client.recv(2048)
+                text = self.client.recv(2048)   # receive upto buffersize bytes from client
                 print str(text)
                 return text
             except Exception, e:
@@ -76,10 +75,8 @@ class PCConn(object):
 if __name__ == "__main__":
     pcc = PCConn()
     pcc.connect()
-
     time.sleep(5)
     #pcc.write('Hello from rpi')
-
     text = pcc.read()
     print "Read: ",str(text)
     pcc.close()
