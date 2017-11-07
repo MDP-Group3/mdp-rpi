@@ -33,7 +33,8 @@ class Main(threading.Thread):
                         print "PC>Tablet: ", str(msg[1:])
                     # else if destination is arduino
                     elif(msg[0] == 'A'):
-                        if(len(msg)==4):    # if faulty reception: two commands received together
+                        if(len(msg)==4):    
+                            # if faulty reception: two commands received together
                             self.sr.write(msg[1])
                             print "PC>Arduino: ", str(msg[1])
                             delay(3)
