@@ -34,13 +34,14 @@ class Main(threading.Thread):
                     # else if destination is arduino
                     elif(msg[0] == 'A'):
                         if(len(msg)==4):    
-                            # if faulty reception: two commands received together
+                            # faulty reception: 2 commands received
                             self.sr.write(msg[1])
                             print "PC>Arduino: ", str(msg[1])
                             delay(3)
                             self.sr.write(msg[3])
                             print "PC>Arduino: ", str(msg[3])
-                        else:               # if faultless reception 
+                        else:
+                            # if faultless reception 
                             self.sr.write(msg[1:])
                             print "PC>Arduino: ", str(msg[1:])
                     # no valid destination           
